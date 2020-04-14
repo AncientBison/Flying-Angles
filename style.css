@@ -1,0 +1,40 @@
+#canvas {
+	background-color: #00bfff;
+	border: 1px black solid;
+	border-radius: 10px;
+}
+#button {
+	background-color: #00bfff;
+  border: 1px black solid;
+  color: white;
+  padding: 15px 25px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+	border-radius: 10px;
+}
+#button:hover {
+	background-color:#0099cc;
+}
+#creditarea {
+	text-align: center;
+}
+#credithtml {
+	background: rgb(18,97,22);
+	background: linear-gradient(90deg, rgba(18,97,22,1) 0%, rgba(40,84,213,1) 100%);
+}
+.crediter {
+	font-size: 40px;
+	color: black;
+}
+#creditsheader {
+	font-size: 100px;
+}
+a:link {
+	color: #000067;
+	text-decoration: none;
+}
+a:visited {
+	color: #000067;
+	text-decoration: none;
+}

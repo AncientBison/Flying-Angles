@@ -1,12 +1,11 @@
 import { startGameLoop } from './gameloop.js';
-
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 stop = false
 ctx.fillStyle = "#ffffff"
 var x = 150
-var ground = 550;
-var y = ground;
+var ground = 590;
+var y = ground - 40;
 var v = 0;
 const g = 1.2;
 var back = false
@@ -18,11 +17,10 @@ for(var i = 1;i<=60;i++) {
 }
 var layer = 3;
 var platforms = []
-var ys = []
 
 function newPlatform(x,width,y) {
 	//platform
-	ctx.fillRect(x,y,Math.abs(x - width),10)
+	ctx.fillRect(x, y, width, -10)
 	platforms.push({
 		xStart : x,
 		xEnd : x + width,
@@ -31,43 +29,60 @@ function newPlatform(x,width,y) {
 }
 
 function getPlatform() {
+  var ys = []
+  ys.push(ground)
 	for(var p = 0;p<platforms.length;p++) {
 		var platform = platforms[p]
-		if (x >= platform.xStart && x <= platform.xEnd) {
-			ys = []
-			ys.push(platform.y)
+		if (x >= platform.xStart - 30 && x <= platform.xEnd - 5) {
+      ys.push(platform.y)
+      //console.log(platform.y)
 		}
 	}
+  ys.sort(function(a, b){return a - b});
+  return ys;
 }
 
 function tick() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	if (jump) {v = 15}
 	
-	if (newY <= ground) {
-		v = 0
-	} else {
-		getPlatform()
-    var newY = Math.min(ground, y - v)
-		for(var i=0;i < ys.length;i++) {
-			var pY = ys[i]//PlatformY
-			var pXS = platforms[i].xStart
-			var pXE = platforms[i].xEnd
-			for(var yc = y;y<=newY;yc++) {
-				for(var u = pXS;u<=pXE;u++) {
-					if (x == u && Math.abs(yc) == pY) {
-						v = 0
-					}
-				}
-			}
-		}
-    y = newY
-		if (v != 0) {
-			v -= g
-		}
-	}
 	if (back) {x -= 7}
 	if (forward) {x += 7}
+
+	if (jump) {v = 15}
+	
+  var newY = y - v;
+  var ys = getPlatform()
+  var onPlatform = false
+  for(var i=0; i < ys.length; i++) {
+    var pY = ys[i] //PlatformY
+
+    // Player landed on platform from above
+    if (y < pY - 40 && newY >= pY - 40) {
+      v = 0;
+      newY = pY - 40;
+      onPlatform = true
+      break;
+    }
+
+    // Player was on a platform and still is
+    if (y == pY - 40 && newY == pY - 40) {
+      onPlatform = true
+      break;
+    }
+
+    // Player hit the platform from below
+    if (y > pY && newY <= pY) {
+      v = 0;
+      newY = pY + 1;
+      break;
+    }
+  }
+
+  y = newY
+  if (!onPlatform) {
+    v -= g;
+  }
+
 	// Arrow
 	ctx.fillStyle = "#ff00ff";
 	ctx.beginPath();
@@ -82,7 +97,7 @@ function tick() {
 	//Ground
 	ctx.fillStyle = "#4d8204";
 	ctx.fillRect(0, 580, canvas.width, 20)
-	newPlatform(10,100,500);
+	newPlatform(50,100,500);
 	//Sun
 	ctx.fillStyle = "#ffff00";
 	ctx.arc(70, 70, 50, 0, 2 * Math.PI);

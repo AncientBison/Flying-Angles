@@ -11,6 +11,7 @@ var v = 0;
 const g = 1.2;
 var back = false
 var forward = false
+var jump = false
 var layers = []
 for(var i = 1;i<=60;i++) {
 	layers.push(i);
@@ -20,19 +21,18 @@ var platforms = []
 var ys = []
 
 function newPlatform(x,width,y) {
-	var xend = x + width
 	//platform
 	ctx.fillRect(x,y,Math.abs(x - width),10)
 	platforms.push({
-		xStart = x
-		xEnd = x + width
-		y = y
+		xStart : x,
+		xEnd : x + width,
+		y : y
 	})
 }
 
-function getPlatformX() {
+function getPlatform() {
 	for(var p = 0;p<platforms.length;p++) {
-		platform = platforms[p]
+		var platform = platforms[p]
 		if (x >= platform.xStart && x <= platform.xEnd) {
 			ys = []
 			ys.push(platform.y)
@@ -42,18 +42,32 @@ function getPlatformX() {
 
 function tick() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	y = Math.min(ground, y - v)
-	if (y == ground) {
+	if (jump) {v = 15}
+	
+	if (newY <= ground) {
 		v = 0
 	} else {
-		v -= g
+		getPlatform()
+    var newY = Math.min(ground, y - v)
+		for(var i=0;i < ys.length;i++) {
+			var pY = ys[i]//PlatformY
+			var pXS = platforms[i].xStart
+			var pXE = platforms[i].xEnd
+			for(var yc = y;y<=newY;yc++) {
+				for(var u = pXS;u<=pXE;u++) {
+					if (x == u && Math.abs(yc) == pY) {
+						v = 0
+					}
+				}
+			}
+		}
+    y = newY
+		if (v != 0) {
+			v -= g
+		}
 	}
-	if (back) {
-		x -= 7
-	}
-	if (forward) {
-		x += 7
-	}
+	if (back) {x -= 7}
+	if (forward) {x += 7}
 	// Arrow
 	ctx.fillStyle = "#ff00ff";
 	ctx.beginPath();
@@ -68,18 +82,16 @@ function tick() {
 	//Ground
 	ctx.fillStyle = "#4d8204";
 	ctx.fillRect(0, 580, canvas.width, 20)
-	newPlatform(10,100,45)
+	newPlatform(10,100,500);
 	//Sun
 	ctx.fillStyle = "#ffff00";
 	ctx.arc(70, 70, 50, 0, 2 * Math.PI);
 	ctx.fill()
 }
-function jump() {
-	v = 15;
-}
+
 function keypress(e) {	
 	if (e.code == "Space") {
-		jump()
+		jump = true
 	}
 	if (e.code == "KeyA") {
 		back = true
@@ -94,6 +106,9 @@ function keyup(e) {
 	}
 	if (e.code == "KeyA") {
 		back = false
+	}
+	if (e.code == "Space") {
+		jump = false
 	}
 }
 

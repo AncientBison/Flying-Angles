@@ -36,4 +36,5 @@ function escape(e) {
 		stop = true;
 	}
 }
+
 document.addEventListener('keypress', escape);

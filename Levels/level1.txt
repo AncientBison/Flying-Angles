@@ -1,0 +1,9 @@
+newPlatform(50,100,500);
+newPlatform(200,100,460);
+newPlatform(350,100,420);
+newPlatform(500,100,380);
+newPlatform(650,100,340);
+newPlatform(500,100,260);
+newPlatform(350,100,260);
+newPlatform(200,100,220);
+newPlatform(50,100,180,true);

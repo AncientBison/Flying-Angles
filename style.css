@@ -1,7 +1,19 @@
+#maintable {
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#maintable td {
+  border: 1px solid white;
+  padding: 5px;
+  border-radius: 0px;
+}
 #canvas {
-	background-color: #00bfff;
+	background-image: url("sky2.0.png");
 	border: 1px black solid;
-	border-radius: 10px;
+  border-radius: 10px;
+  background-position: 100px 0px;
 }
 #button {
 	background-color: #00bfff;
@@ -37,4 +49,21 @@ a:link {
 a:visited {
 	color: #000067;
 	text-decoration: none;
+}
+#settingspage {
+  background-color: #191919;
+  color: white;
+  font-family: "Lucida Console", Courier, monospace;
+}
+#mainpagetitle {
+  text-shadow: 2px 3px rgba(255,255,255,0.4);
+}
+td {
+  width: 600px;
+}
+#purple {
+  color: purple;
+}
+#play {
+  text-shadow: 2px 1px #00009c;
 }

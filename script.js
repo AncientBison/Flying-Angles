@@ -1,4 +1,6 @@
-     import { startGameLoop } from './gameloop.js';
+import { startGameLoop } from './gameloop.js';
+import { moving_background, grass, color, debug, levelnum,setCookie } from './settings.js';
+setCookie("levelnum",1)
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 stop = false
@@ -16,15 +18,16 @@ canvas.height = 600
 canvas.width = 800
 var won = false
 var level = "fakelevel()"
+var cloudpos = 0
 
 //file reading
 function getlevel(levelnum) {
   $.get("Levels/level" + levelnum + ".txt", function(levelfile) {
-    console.log(levelfile)
+    if (debug) console.log(levelfile)
     level = levelfile
   })
 }
-$(document).ready(getlevel(1));
+$(document).ready(getlevel(levelnum));
 
 for(var i = 1;i<=60;i++) {
   layers.push(i);
@@ -34,7 +37,7 @@ var layer = 3;
 var platforms = []
 
 function fakelevel() {
-  console.log("CURRENT STATUS: Level is not defined.")
+  if (debug) console.log("CURRENT STATUS: Level is not defined.")
 }
 
 function newPlatform(x,width,y,goal=false) {
@@ -57,13 +60,17 @@ function getPlatforms() {
   var platform = platforms[p]
   if (x >= platform.xStart - 30 && x <= platform.xEnd) {
       platforms_at_x.push({y:platform.y, goal:platform.goal})
-      //console.log(platform.y)
+      if (debug) console.log(platform.y)
   }
   }
   return platforms_at_x;
 }
 
 function tick() {
+  if (moving_background) {
+    cloudpos += Math.random()
+  }
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (back) {x -= 7}
   if (forward) {x += 7}
@@ -107,9 +114,20 @@ function tick() {
   if (!onPlatform) {
     v -= g;
   }
-
-  // Arrow
-  ctx.fillStyle = "#ff00ff";
+  //Sun
+  ctx.fillStyle = "#ffff00";
+  ctx.beginPath()
+  ctx.arc(70, 70, 50, 0, 2 * Math.PI);
+  ctx.closePath()
+  ctx.stroke()
+  ctx.fill()
+  //grass cover
+  ctx.fillStyle = "#00cdff"
+  if (!grass) {
+    ctx.fillRect(0,560,canvas.width,21)
+  }
+  // Character
+  ctx.fillStyle = color.toLowerCase();
   ctx.beginPath();
   ctx.moveTo(0+x,0+y);
   ctx.lineTo(30+x,0+y);
@@ -119,22 +137,17 @@ function tick() {
   ctx.closePath()
   ctx.stroke();
   ctx.fill()
-  //Ground
-  ctx.fillStyle = "#4d8204";
-  ctx.fillRect(0, 580, canvas.width, 20)
   //the platforms are in a var called level
   eval(level)
-  //Sun
-  ctx.fillStyle = "#ffff00";
-  ctx.arc(70, 70, 50, 0, 2 * Math.PI);
-  ctx.fill()
+  //cloud and sky and ground
+  canvas.style.backgroundPosition = cloudpos + "px 0px"
+  //check if on goal
   if (won) {
     ctx.fillStyle = "black"
     ctx.font = "100px Arial";
     ctx.fillText("You Won!",200, 300);
   }
 }
-
 function keypress(e) {  
   if (e.code == "Space") {
   jump = true
@@ -158,31 +171,7 @@ function keyup(e) {
   }
 }
 
-function sound(src) {
-  this.sound = document.createElement("audio");
-  this.sound.src = src;
-  this.sound.setAttribute("preload", "auto");
-  this.sound.setAttribute("controls", "none");
-  this.sound.style.display = "none";
-  document.body.appendChild(this.sound);
-  this.play = function(){
-    console.log("this function was called!")
-    this.sound.play();
-    console.info("i played song")
-  }
-  this.stop = function(){
-    this.sound.pause();
-  }    
-}
-
-function playBgSound() {
-    console.log("this function was called 2!")
-  var bgmusic = new sound("https://github.com/AncientBison/FlyingSquaresMusic/blob/master/%5BOLD%5DAll%20Bee%20Swarm%20Simulator%20songs-%5BAudioTrimmer.com%5D.mp3")
-  bgmusic.play();
-}
-
 document.addEventListener('keypress', keypress);
 document.addEventListener('keyup', keyup);
 
-playBgSound();
 startGameLoop(tick, 30)

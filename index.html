@@ -1,19 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html id="settingspage">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>Flying Angles - Main</title>
-    <link href="style.css" rel="stylesheet" type="text/css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Flying Angles - Settings</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-		<canvas id="canvas" width="1500" height="600"></canvas>
-		<br>
-		<br>
-		<a href="credits.html">
-			<input id="button" type="button" value="Credits"/>
-		</a>
-	  <script type="module" src="script.js"></script>
+	  <h1 id="mainpagetitle">Flying Angles</h1><h3 id="play"><a href="game.html">Play Flying Angles</a></h3>
+    <table id="maintable">
+      <tr>
+        <td id="playbox">
+          <h2> HOW TO PLAY </h2>
+        </td>
+        <td id="settingsbox">
+          <h2> SETTINGS </h2>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Press space to jump.
+        </td>
+        <td id="s1">
+          Moving background:
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Press A to walk left.
+        </td>
+        <td id="s2">
+          Grass:
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Press D to walk right.
+        </td>
+        <td id="s3">
+          Square Color:
+        </td>
+      </tr>
+      <tr>
+        <td>
+          The goal is to get to the <span id="purple">purple</span> platform.
+        </td>
+        <td id="s4">
+          Level Number: 1
+          (To go down press control and click.)
+        </td>
+      </tr>
+      <tr>
+        <td>
+          The grey rectangles are normal platforms.
+        </td>
+        <td id="s5">
+          Debug:
+        </td>
+      </tr>
+    </table>
+    <script type="module" src="mainpage.js"></script>
+    <audio src="https://github.com/AncientBison/FlyingSquaresMusic/blob/master/%5BOLD%5DAll%20Bee%20Swarm%20Simulator%20songs-%5BAudioTrimmer.com%5D.mp3?raw=true" preload="auto" controls="none" style="display: none"/>
   </body>
 </html>

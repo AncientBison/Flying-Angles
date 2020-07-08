@@ -34,7 +34,7 @@ s4.addEventListener("click",function(e) {
     levelup()
     s4.innerHTML = "Level Number: " + levelnum
   }
-  else if (e.ctrlKey && levelnum > 1) {
+  else if (e.ctrlKey && levelnum > 0) {
     leveldown()
     s4.innerHTML = "Level Number: " + levelnum
   }

@@ -9,7 +9,7 @@ var x = 15
 var ground = 590;
 var y = ground - 50;
 var v = 0;
-const g = 1.2;//normal 1.2
+var g = 1.2;//normal 1.2
 var back = false
 var forward = false
 var jump = false
@@ -40,15 +40,18 @@ function fakelevel() {
   if (debug) console.log("CURRENT STATUS: Level is not defined.")
 }
 
-function newPlatform(x,width,y,goal=false) {
+function newPlatform(x,width,y,type = 1) {
   //platform
-  ctx.fillStyle = goal ? "purple" : "#808080"
+  var goal = type==2 ? true:false
+  var tramp = type==3 ? true:false
+  ctx.fillStyle = goal ? "purple" : tramp ? "#24ff5e" : "#808080"
   ctx.fillRect(x, y, width, -10)
   platforms.push({
   xStart : x,
   xEnd : x + width,
   y : y,
-  goal : goal
+  goal : goal,
+  tramp : tramp
   })
   platforms.sort(function(a, b){return a.y - b.y});
 }
@@ -59,7 +62,7 @@ function getPlatforms() {
   for(var p = 0;p<platforms.length;p++) {
   var platform = platforms[p]
   if (x >= platform.xStart - 30 && x <= platform.xEnd) {
-      platforms_at_x.push({y:platform.y, goal:platform.goal})
+      platforms_at_x.push({y:platform.y, goal:platform.goal,tramp:platform.tramp})
       if (debug) console.log(platform.y)
   }
   }
@@ -75,6 +78,7 @@ function tick() {
   if (back) {x -= 7}
   if (forward) {x += 7}
 
+
   if (jump && v == 0) {v = 15}
   
   var newY = y - v;
@@ -83,6 +87,12 @@ function tick() {
   for(var i=0; i < ys.length; i++) {
     var pY = ys[i].y //PlatformY
     var pG = ys[i].goal //IsGoal
+    var pT = ys[i].tramp
+
+    //stoptramp
+    if (newY > y) {
+      g = 1.2
+    }
 
     // Player landed on platform from above
     if (y < pY - 40 && newY >= pY - 40) {
@@ -92,6 +102,9 @@ function tick() {
       if (pG) {
         console.log("You Won!")
         won = true
+      }
+      if (pT) {
+        g = 0.9
       }
       break;
     }

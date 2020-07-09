@@ -1,4 +1,5 @@
 newPlatform(50,100,500);
+newPlatform(150,100,480,4)
 newPlatform(200,100,460);
 newPlatform(350,100,420);
 newPlatform(500,100,380);
